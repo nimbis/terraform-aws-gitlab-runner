@@ -7,21 +7,16 @@ EOF
 
 ${pre_install}
 
-if [[ `echo ${runners_executor}` == "docker" ]]
-then
-  echo 'installing docker'
-  if grep -q ':2$' /etc/system-release-cpe  ; then
-    # AWS Linux 2 provides docker via extras only and uses systemd (https://aws.amazon.com/amazon-linux-2/release-notes/)
-    amazon-linux-extras install docker
-    usermod -a -G docker ec2-user
-    systemctl enable docker
-    systemctl start docker
-  else
-    yum install docker -y
-    usermod -a -G docker ec2-user
-    service docker start
-  fi
-fi
+# Install docker
+# Open ports necessary for docker
+ufw allow in on docker0
+
+# Avoid an OOM bug in Docker
+# https://www.terraform.io/docs/enterprise/before-installing/rhel-requirements.html
+yum-config-manager --enable rhel-7-server-rhui-extras-rpms
+yum install docker -y
+sed -i '/--authorization-plugin=rhel-push-plugin/d' /usr/lib/systemd/system/docker.service
+systemctl daemon-reload
 
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash
 yum install gitlab-runner-${gitlab_runner_version} -y
