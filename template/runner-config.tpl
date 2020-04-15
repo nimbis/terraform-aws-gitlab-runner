@@ -40,6 +40,7 @@ check_interval = 0
     MachineDriver = "amazonec2"
     MachineName = "runner-%s"
     MachineOptions = [
+      "amazonec2-ssh-user=ec2-user",
       "amazonec2-instance-type=${runners_instance_type}",
       "amazonec2-region=${aws_region}",
       "amazonec2-zone=${runners_aws_zone}",
