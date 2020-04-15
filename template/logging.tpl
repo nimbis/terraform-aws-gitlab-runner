@@ -31,3 +31,8 @@ EOF
 # Replace instance id.
 instanceId=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .instanceId)
 sed -i -e "s/{instanceId}/$instanceId/g" /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/gitlab.conf
+
+# Load GitLab CW Logs config
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+-a fetch-config -m ec2 \
+-c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/gitlab.json -s
