@@ -560,3 +560,9 @@ variable "log_group_name" {
   default     = null
   type        = string
 }
+
+variable "runner_user_data_filepath" {
+  description = "File path of the UserData script for the runner machine."
+  type        = string
+  default     = "/root/user_data.sh"
+}

@@ -35,7 +35,12 @@ locals {
       eip                 = var.enable_eip ? local.template_eip : ""
       logging             = var.enable_cloudwatch_logging ? local.logging_user_data : ""
       gitlab_runner       = local.template_gitlab_runner
+      runner_user_data    = local.template_runner_machine_user_data
       user_data_trace_log = var.enable_runner_user_data_trace_log
+  })
+
+  template_runner_machine_user_data = templatefile("${path.module}/template/runner-machine-user-data.tpl", {
+    runner_user_data_filepath = var.runner_user_data_filepath
   })
 
   template_eip = templatefile("${path.module}/template/eip.tpl", {
@@ -120,6 +125,7 @@ locals {
       runners_output_limit              = var.runners_output_limit
       runners_volumes_tmpfs             = join(",", [for v in var.runners_volumes_tmpfs : format("\"%s\" = \"%s\"", v.volume, v.options)])
       runners_services_volumes_tmpfs    = join(",", [for v in var.runners_services_volumes_tmpfs : format("\"%s\" = \"%s\"", v.volume, v.options)])
+      runner_user_data_filepath         = var.runner_user_data_filepath
       bucket_name                       = local.bucket_name
       shared_cache                      = var.cache_shared
     }

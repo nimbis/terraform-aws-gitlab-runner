@@ -20,3 +20,5 @@ done
 ${logging}
 
 ${gitlab_runner}
+
+${runner_user_data}
