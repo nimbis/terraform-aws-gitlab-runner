@@ -8,12 +8,12 @@ cat <<EOF >> /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/gitl
         "collect_list": [
           {
             "file_path": "/var/log/dmesg",
-            "log_group_name": "{hostname}",
+            "log_group_name": "${log_group_name}",
             "log_stream_name": "{instance_id}/dmesg"
           },
           {
             "file_path": "/var/log/user-data.log",
-            "log_group_name": "{hostname}",
+            "log_group_name": "${log_group_name}",
             "log_stream_name": "{instance_id}/user-data"
           }
         ]
