@@ -37,6 +37,7 @@ locals {
       gitlab_runner       = local.template_gitlab_runner
       runner_user_data    = local.template_runner_machine_user_data
       user_data_trace_log = var.enable_runner_user_data_trace_log
+      log_group_name      = var.log_group_name != null ? var.log_group_name : var.environment
   })
 
   template_runner_machine_user_data = templatefile("${path.module}/template/runner-machine-user-data.tpl", {

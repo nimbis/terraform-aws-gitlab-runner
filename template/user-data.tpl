@@ -5,6 +5,11 @@ if [[ $(echo ${user_data_trace_log}) == false ]]; then
   set -x
 fi
 
+# Set hostname to log_group_name (default is gitlab-runner)
+# This ensures any existing CW config which uses {hostname} will
+# place logs in the appropriate log group.
+hostnamectl set-hostname ${log_group_name}
+
 # Add current hostname to hosts file
 tee /etc/hosts <<EOL
 127.0.0.1   localhost localhost.localdomain $(hostname)
