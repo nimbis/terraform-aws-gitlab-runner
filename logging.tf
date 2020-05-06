@@ -8,6 +8,13 @@ resource "aws_iam_role_policy" "instance" {
   })
 }
 
+resource "aws_iam_role_policy" "put_metric_data" {
+  count  = var.enable_cloudwatch_logging ? 1 : 0
+  name   = "${var.environment}-put-metric-data-role"
+  role   = aws_iam_role.instance.name
+  policy = file("${path.module}/policies/instance-metric-data.json")
+}
+
 locals {
   logging_user_data = templatefile("${path.module}/template/logging.tpl",
     {
