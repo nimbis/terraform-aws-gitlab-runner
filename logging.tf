@@ -2,7 +2,17 @@ resource "aws_iam_role_policy" "instance" {
   count  = var.enable_cloudwatch_logging ? 1 : 0
   name   = "${var.environment}-instance-role"
   role   = aws_iam_role.instance.name
-  policy = templatefile("${path.module}/policies/instance-logging-policy.json", { arn_format = var.arn_format })
+  policy = templatefile("${path.module}/policies/instance-logging-policy.json", {
+    arn_format     = var.arn_format
+    log_group_name = var.log_group_name != null ? var.log_group_name : var.environment
+  })
+}
+
+resource "aws_iam_role_policy" "put_metric_data" {
+  count  = var.enable_cloudwatch_logging ? 1 : 0
+  name   = "${var.environment}-put-metric-data-role"
+  role   = aws_iam_role.instance.name
+  policy = file("${path.module}/policies/instance-metric-data.json")
 }
 
 locals {
